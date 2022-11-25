@@ -1,2 +1,2 @@
-# SMTAttendance
-To track employee position
+# Netraya
+To allow user to change employee schedule
