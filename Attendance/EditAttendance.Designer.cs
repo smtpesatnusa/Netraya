@@ -39,8 +39,6 @@ namespace SMTAttendance
             this.tbSection = new System.Windows.Forms.TextBox();
             this.tbLineCode = new System.Windows.Forms.TextBox();
             this.tbDateSchedule = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.dateTimePickerIn = new System.Windows.Forms.DateTimePicker();
             this.badgeId = new System.Windows.Forms.Label();
             this.cmbShift = new System.Windows.Forms.ComboBox();
             this.id = new System.Windows.Forms.Label();
@@ -73,7 +71,7 @@ namespace SMTAttendance
             this.userdetail.AutoSize = true;
             this.userdetail.BackColor = System.Drawing.Color.Transparent;
             this.userdetail.Font = new System.Drawing.Font("Open Sans", 8.25F);
-            this.userdetail.Location = new System.Drawing.Point(33, 377);
+            this.userdetail.Location = new System.Drawing.Point(36, 306);
             this.userdetail.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.userdetail.Name = "userdetail";
             this.userdetail.Size = new System.Drawing.Size(77, 19);
@@ -89,7 +87,7 @@ namespace SMTAttendance
             this.updateBtn.Depth = 0;
             this.updateBtn.HighEmphasis = true;
             this.updateBtn.Icon = null;
-            this.updateBtn.Location = new System.Drawing.Point(210, 364);
+            this.updateBtn.Location = new System.Drawing.Point(192, 287);
             this.updateBtn.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.updateBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.updateBtn.Name = "updateBtn";
@@ -159,36 +157,12 @@ namespace SMTAttendance
             this.tbDateSchedule.TabIndex = 260;
             this.tbDateSchedule.Text = "Date Schedule";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Open Sans", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(36, 304);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 19);
-            this.label4.TabIndex = 263;
-            this.label4.Text = "Actual In";
-            // 
-            // dateTimePickerIn
-            // 
-            this.dateTimePickerIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePickerIn.CustomFormat = "HH:mm";
-            this.dateTimePickerIn.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerIn.Location = new System.Drawing.Point(129, 297);
-            this.dateTimePickerIn.Name = "dateTimePickerIn";
-            this.dateTimePickerIn.ShowUpDown = true;
-            this.dateTimePickerIn.Size = new System.Drawing.Size(108, 26);
-            this.dateTimePickerIn.TabIndex = 265;
-            this.dateTimePickerIn.Value = new System.DateTime(2022, 7, 7, 17, 0, 0, 0);
-            // 
             // badgeId
             // 
             this.badgeId.AutoSize = true;
             this.badgeId.BackColor = System.Drawing.Color.Transparent;
             this.badgeId.Font = new System.Drawing.Font("Open Sans", 8.25F);
-            this.badgeId.Location = new System.Drawing.Point(36, 358);
+            this.badgeId.Location = new System.Drawing.Point(36, 287);
             this.badgeId.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.badgeId.Name = "badgeId";
             this.badgeId.Size = new System.Drawing.Size(65, 19);
@@ -226,12 +200,10 @@ namespace SMTAttendance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 426);
+            this.ClientSize = new System.Drawing.Size(478, 355);
             this.Controls.Add(this.id);
             this.Controls.Add(this.cmbShift);
             this.Controls.Add(this.badgeId);
-            this.Controls.Add(this.dateTimePickerIn);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.tbDateSchedule);
             this.Controls.Add(this.tbLineCode);
             this.Controls.Add(this.tbSection);
@@ -250,7 +222,7 @@ namespace SMTAttendance
             this.ShowInTaskbar = false;
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Edit Attendance";
+            this.Text = "Edit Schedule";
             this.Load += new System.EventHandler(this.EditAttendance_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -268,8 +240,6 @@ namespace SMTAttendance
         public System.Windows.Forms.TextBox tbSection;
         public System.Windows.Forms.TextBox tbLineCode;
         public System.Windows.Forms.Label tbDateSchedule;
-        private System.Windows.Forms.Label label4;
-        public System.Windows.Forms.DateTimePicker dateTimePickerIn;
         public System.Windows.Forms.Label badgeId;
         public System.Windows.Forms.ComboBox cmbShift;
         public System.Windows.Forms.Label id;

@@ -82,11 +82,17 @@ namespace SMTAttendance
                             dept = row["dept"].ToString();
                         }
 
-                        MainMenu mm = new MainMenu();
-                        mm.toolStripUsername.Text = "Welcome " + name + " " + username + ", " + role + " |";
-                        mm.userdetail.Text = username+"|" +dept;
-                        mm.Show();
+                        Attendance attendance = new Attendance();
+                        attendance.toolStripUsername.Text = "Welcome " + name + " " + username + ", " + role + " |";
+                        attendance.userdetail.Text = username + "|" + dept;
+                        attendance.Show();
                         this.Hide();
+
+                        //MainMenu mm = new MainMenu();
+                        //mm.toolStripUsername.Text = "Welcome " + name + " " + username + ", " + role + " |";
+                        //mm.userdetail.Text = username+"|" +dept;
+                        //mm.Show();
+                        //this.Hide();
                     }
                     else
                     {

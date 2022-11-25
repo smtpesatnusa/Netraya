@@ -150,59 +150,11 @@
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="EmployeePosition.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EmployeePosition.Designer.cs">
-      <DependentUpon>EmployeePosition.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogEmployee\LogEmployee.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LogEmployee\LogEmployee.Designer.cs">
-      <DependentUpon>LogEmployee.cs</DependentUpon>
-    </Compile>
     <Compile Include="Attendance\DetailPosition.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Attendance\DetailPosition.Designer.cs">
       <DependentUpon>DetailPosition.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\DetailEmployee.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\DetailEmployee.Designer.cs">
-      <DependentUpon>DetailEmployee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\EmployeeShiftBoard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\EmployeeShiftBoard.Designer.cs">
-      <DependentUpon>EmployeeShiftBoard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\EmployeeShiftList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\EmployeeShiftList.Designer.cs">
-      <DependentUpon>EmployeeShiftList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\ChangeEmployeeGroup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\ChangeEmployeeGroup.Designer.cs">
-      <DependentUpon>ChangeEmployeeGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\DetailEmployeeGroup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\DetailEmployeeGroup.Designer.cs">
-      <DependentUpon>DetailEmployeeGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\EmployeeGrouplist.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\EmployeeGrouplist.Designer.cs">
-      <DependentUpon>EmployeeGrouplist.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -233,35 +185,11 @@
     <Compile Include="Schedule\SelectedGroupEmployee.Designer.cs">
       <DependentUpon>SelectedGroupEmployee.cs</DependentUpon>
     </Compile>
-    <Compile Include="Employee\SelectedEmployee.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\SelectedEmployee.Designer.cs">
-      <DependentUpon>SelectedEmployee.cs</DependentUpon>
-    </Compile>
     <Compile Include="Schedule\AddSchedule.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Schedule\AddSchedule.Designer.cs">
       <DependentUpon>AddSchedule.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\EmployeeList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\EmployeeList.Designer.cs">
-      <DependentUpon>EmployeeList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\AddEmployee.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\AddEmployee.Designer.cs">
-      <DependentUpon>AddEmployee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Employee\ImportEmployee.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Employee\ImportEmployee.Designer.cs">
-      <DependentUpon>ImportEmployee.cs</DependentUpon>
     </Compile>
     <Compile Include="LoadForm.cs">
       <SubType>Form</SubType>
@@ -311,32 +239,8 @@
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EmployeePosition.resx">
-      <DependentUpon>EmployeePosition.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogEmployee\LogEmployee.resx">
-      <DependentUpon>LogEmployee.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Attendance\DetailPosition.resx">
       <DependentUpon>DetailPosition.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\DetailEmployee.resx">
-      <DependentUpon>DetailEmployee.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\EmployeeShiftBoard.resx">
-      <DependentUpon>EmployeeShiftBoard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\EmployeeShiftList.resx">
-      <DependentUpon>EmployeeShiftList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\ChangeEmployeeGroup.resx">
-      <DependentUpon>ChangeEmployeeGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\DetailEmployeeGroup.resx">
-      <DependentUpon>DetailEmployeeGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\EmployeeGrouplist.resx">
-      <DependentUpon>EmployeeGrouplist.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Attendance\Attendance.resx">
       <DependentUpon>Attendance.cs</DependentUpon>
@@ -350,21 +254,8 @@
     <EmbeddedResource Include="Schedule\SelectedGroupEmployee.resx">
       <DependentUpon>SelectedGroupEmployee.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Employee\SelectedEmployee.resx">
-      <DependentUpon>SelectedEmployee.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Schedule\AddSchedule.resx">
       <DependentUpon>AddSchedule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\EmployeeList.resx">
-      <DependentUpon>EmployeeList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\AddEmployee.resx">
-      <DependentUpon>AddEmployee.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Employee\ImportEmployee.resx">
-      <DependentUpon>ImportEmployee.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadForm.resx">
       <DependentUpon>LoadForm.cs</DependentUpon>

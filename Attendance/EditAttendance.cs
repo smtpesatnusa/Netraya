@@ -51,7 +51,6 @@ namespace SMTAttendance
 
                         id.Text = idAttendance;
                         cmbShift.SelectedValue = idShift;
-                        dateTimePickerIn.Text = intime;
                     }
                 }
             }
@@ -75,7 +74,6 @@ namespace SMTAttendance
 
                 var cmd = new MySqlCommand("", myConn);
                 string shiftID = cmbShift.SelectedValue.ToString();
-                string actualIn = tbDateSchedule.Text + " " + dateTimePickerIn.Text;
 
                 // menentukan jadwal schedule in dan out
                 var scheduleTime = cmbShift.Text.Split('(');
@@ -93,7 +91,7 @@ namespace SMTAttendance
 
                 // update attendance 
                 myConn.Open();
-                string queryUpdate = " UPDATE tbl_attendance SET shiftId = '" + shiftID + "', ScheduleIn = '" + scheduleIn + "', ScheduleOut = '" + scheduleOut + "', intime ='" + actualIn + "'  " +
+                string queryUpdate = " UPDATE tbl_attendance SET shiftId = '" + shiftID + "', ScheduleIn = '" + scheduleIn + "', ScheduleOut = '" + scheduleOut + "'" +
                     ", BreakOut = Null, BreakIn = Null, TotalBreak = 0, LateIn = 0, EarlyOut = 0 WHERE id = '"+id.Text+"'";
 
                 //MessageBox.Show(queryUpdate);

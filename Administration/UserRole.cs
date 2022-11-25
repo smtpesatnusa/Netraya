@@ -41,7 +41,7 @@ namespace SMTAttendance
             dept = userId[1].Trim();
 
             // display data db to treeview
-            dtSource = help.GetData("SELECT NodeID,ParentID,NodeText FROM tbl_menu");
+            dtSource = help.GetData("SELECT NodeID,ParentID,NodeText FROM tbl_menuchangeschedule");
             DataTable dt = help.GetChildData(dtSource, -1);
             foreach (DataRow dr in dt.Rows)
             {
@@ -202,7 +202,7 @@ namespace SMTAttendance
 
                 if (badgeId != "System.Data.DataRowView")
                 {
-                    string query = "SELECT a.roleID, b.parentId FROM tbl_userrole a, tbl_menu b WHERE " +
+                    string query = "SELECT a.roleID, b.parentId FROM tbl_userrole a, tbl_menuchangeschedule b WHERE " +
                         "a.roleID = b.nodeID AND a.userId = '" + badgeId + "' ORDER BY b.parentId, a.roleID";
                     using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
                     {

@@ -21,7 +21,7 @@ namespace SMTAttendance
         {
             // to let user open app in 1 instance
             bool createdNew = true;
-            using (Mutex mutex = new Mutex(true, "SMT Attendance", out createdNew))
+            using (Mutex mutex = new Mutex(true, "Netraya", out createdNew))
             {
                 if (createdNew)
                 {

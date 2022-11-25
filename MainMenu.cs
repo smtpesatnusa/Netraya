@@ -12,8 +12,6 @@ namespace SMTAttendance
     {
         readonly Helper help = new Helper();
         string idUser, dept;
-        string dateNow, dt2, dt3;
-        bool sidebarExpand;
 
         MySqlConnection myConn;
 
@@ -21,7 +19,6 @@ namespace SMTAttendance
         {
             InitializeComponent();
         }
-
 
         private void MainMenu_Load(object sender, System.EventArgs e)
         {
@@ -37,7 +34,6 @@ namespace SMTAttendance
             // to display menu based on user role
             CreateMenu();
         }
-
 
         private void timer_Tick(object sender, System.EventArgs e)
         {
@@ -107,28 +103,10 @@ namespace SMTAttendance
 
         private void scheduleToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Schedule schedule = new Schedule();
-            schedule.toolStripUsername.Text = toolStripUsername.Text;
-            schedule.userdetail.Text = userdetail.Text;
-            schedule.Show();
-            this.Hide();
-        }
-
-        private void groupToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            EmployeeGrouplist employeeGrouplist = new EmployeeGrouplist();
-            employeeGrouplist.toolStripUsername.Text = toolStripUsername.Text;
-            employeeGrouplist.userdetail.Text = userdetail.Text;
-            employeeGrouplist.Show();
-            this.Hide();
-        }
-
-        private void listToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Employeelist employeelist = new Employeelist();
-            employeelist.toolStripUsername.Text = toolStripUsername.Text;
-            employeelist.userdetail.Text = userdetail.Text;
-            employeelist.Show();
+            Attendance attendance = new Attendance();
+            attendance.toolStripUsername.Text = toolStripUsername.Text;
+            attendance.userdetail.Text = userdetail.Text;
+            attendance.Show();
             this.Hide();
         }
 
@@ -148,117 +126,6 @@ namespace SMTAttendance
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar(result.ToString(), 750);
                 SnackBarMessage.Show(this);
             }
-        }
-
-        private void employeeCard_Click(object sender, System.EventArgs e)
-        {
-            Employeelist employeelist = new Employeelist();
-            employeelist.toolStripUsername.Text = toolStripUsername.Text;
-            employeelist.userdetail.Text = userdetail.Text;
-            employeelist.Show();
-            this.Hide();
-        }
-
-        private void employeeShiftBoardToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            EmployeeShiftBoard employeeShiftBoard = new EmployeeShiftBoard();
-            employeeShiftBoard.toolStripUsername.Text = toolStripUsername.Text;
-            employeeShiftBoard.userdetail.Text = userdetail.Text;
-            employeeShiftBoard.Show();
-            this.Hide();
-        }
-
-        private void totalOntime_Click(object sender, System.EventArgs e)
-        {
-            Attendance attendance = new Attendance();
-            attendance.toolStripUsername.Text = toolStripUsername.Text;
-            attendance.userdetail.Text = userdetail.Text;
-            attendance.Show();
-            attendance.materialTabControl2.SelectedIndex = 1;
-            this.Hide();
-        }
-
-        private void totalLate_Click(object sender, System.EventArgs e)
-        {
-            Attendance attendance = new Attendance();
-            attendance.toolStripUsername.Text = toolStripUsername.Text;
-            attendance.userdetail.Text = userdetail.Text;
-            attendance.Show();
-            attendance.materialTabControl2.SelectedIndex = 2;
-            this.Hide();
-        }
-
-        private void totalAbsent_Click(object sender, System.EventArgs e)
-        {
-            Attendance attendance = new Attendance();
-            attendance.toolStripUsername.Text = toolStripUsername.Text;
-            attendance.userdetail.Text = userdetail.Text;
-            attendance.Show();
-            attendance.materialTabControl2.SelectedIndex = 3;
-            this.Hide();
-        }
-
-        private void logEmployeeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LogEmployee logEmployee = new LogEmployee();
-            logEmployee.toolStripUsername.Text = toolStripUsername.Text;
-            logEmployee.userdetail.Text = userdetail.Text;
-            logEmployee.Show();
-            this.Hide();
-        }
-
-        private void attendancesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Attendance attendance = new Attendance();
-            attendance.toolStripUsername.Text = toolStripUsername.Text;
-            attendance.userdetail.Text = userdetail.Text;
-            attendance.Show();
-            this.Hide();
-        }
-
-        private void positionImage_Click(object sender, EventArgs e)
-        {
-            EmployeePosition employeePosition = new EmployeePosition();
-            employeePosition.toolStripUsername.Text = toolStripUsername.Text;
-            employeePosition.userdetail.Text = userdetail.Text;
-            employeePosition.Show();
-            this.Hide();
-        }
-
-        private void statusTagToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Status status = new Status();
-            status.toolStripUsername.Text = toolStripUsername.Text;
-            status.userdetail.Text = userdetail.Text;
-            status.Show();
-            this.Hide();
-        }
-
-        private void totalEmployee_Click(object sender, EventArgs e)
-        {
-            Employeelist employeelist = new Employeelist();
-            employeelist.toolStripUsername.Text = toolStripUsername.Text;
-            employeelist.userdetail.Text = userdetail.Text;
-            employeelist.Show();
-            this.Hide();
-        }
-
-        private void buttonEmployeeList_Click(object sender, EventArgs e)
-        {
-            Employeelist employeelist = new Employeelist();
-            employeelist.toolStripUsername.Text = toolStripUsername.Text;
-            employeelist.userdetail.Text = userdetail.Text;
-            employeelist.Show();
-            this.Hide();
-        }
-
-        private void buttonEmployeeGroup_Click(object sender, EventArgs e)
-        {
-            EmployeeGrouplist employeeGrouplist = new EmployeeGrouplist();
-            employeeGrouplist.toolStripUsername.Text = toolStripUsername.Text;
-            employeeGrouplist.userdetail.Text = userdetail.Text;
-            employeeGrouplist.Show();
-            this.Hide();
         }
 
         private void CreateMenu()

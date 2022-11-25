@@ -47,12 +47,6 @@ namespace SMTAttendance
             dateLabel.Text = DateTime.Parse(dateSelected).ToString("dddd, dd MMMM yyyy");
 
             LoadData();
-            LoadDataOntime();
-            LoadDataLate();
-            LoadDataAbsent();
-
-            //menampilkan data combobox 
-            help.displayCmbList("SELECT * FROM tbl_mastershift ORDER BY id ", "name", "name", cmbShift);
         }
 
         //The below is the key for showing Progress bar
@@ -138,6 +132,15 @@ namespace SMTAttendance
             }
 
             dataGridViewAllList.DataSource = dtTemp;
+
+            // add button detail in datagridview table
+            DataGridViewButtonColumn btnEdit = new DataGridViewButtonColumn();
+            dataGridViewAllList.Columns.Add(btnEdit);
+            btnEdit.HeaderText = "";
+            btnEdit.Text = "Edit";
+            btnEdit.Name = "btnEdit";
+            btnEdit.UseColumnTextForButtonValue = true;
+
             // add button detail in datagridview table
             DataGridViewButtonColumn btnDetail = new DataGridViewButtonColumn();
             dataGridViewAllList.Columns.Add(btnDetail);
@@ -294,7 +297,7 @@ namespace SMTAttendance
                     "(SELECT e.badgeID, e.NAME, e.linecode, f.description, '-' AS ScheduleIn,'-' AS intime, '-' AS outtime, 'Absent' AS Sttus " +
                     "FROM tbl_employee e, tbl_masterlinecode f WHERE e.linecode = f.name AND e.dept = '"+dept+"' AND e.badgeID NOT IN(SELECT b.badgeID FROM " +
                     "tbl_attendance a, tbl_employee b WHERE a.EmplId = b.id AND a.date = '" + dateSelected + "' AND b.dept = '" + dept + "' AND intime IS NOT NULL) ) AS A " +
-                    "ORDER BY FIELD(sttus, 'Ontime', 'Late', 'Absent'), schedulein, linecode, NAME";
+                    "ORDER BY FIELD(sttus, 'Late', 'Ontime', 'Absent'), schedulein, linecode, NAME";
 
                 StartProgress("Loading...");
 
@@ -318,429 +321,25 @@ namespace SMTAttendance
             }
         }
 
-        private void LoadDataNormal()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                myConn.Open();
-
-                string query = "SELECT linecode, DESCRIPTION AS section, badgeID, NAME, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT e.badgeID, e.name, e.linecode, f.description, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    "DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e, " +
-                    "tbl_masterlinecode f WHERE e.id = a.emplid AND e.linecode = f.name " +
-                    "AND e.dept = '" + dept + "' AND a.date = '" + dateSelected + "'  AND e.shift = 'Normal' AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A UNION " +
-                    "SELECT linecode, DESCRIPTION AS section, badgeID, NAME, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT e.badgeID, e.NAME, e.linecode, f.description, '-' AS ScheduleIn,'-' AS intime, '-' AS outtime, 'Absent' AS Sttus " +
-                    "FROM tbl_employee e, tbl_masterlinecode f WHERE e.linecode = f.name AND e.dept = '"+dept+"' AND e.badgeID NOT IN(SELECT b.badgeID FROM " +
-                    "tbl_attendance a, tbl_employee b WHERE a.EmplId = b.id AND a.date = '" + dateSelected + "' AND b.dept = '" + dept + "'  AND b.shift = 'Normal' AND intime IS NOT NULL) ) AS A " +
-                    "ORDER BY FIELD(sttus, 'Ontime', 'Late', 'Absent'), schedulein, linecode, NAME";
-
-                StartProgress("Loading...");
-
-                LoadDS(query);
-                FillGrid();
-
-                string record = dtSource.Rows.Count.ToString();
-
-                CloseProgress();
-                myConn.Close();
-                totalLblAll.Text = dtSource.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataShift()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                myConn.Open();
-
-                string query = "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM (SELECT e.badgeID, e.name, e.linecode, " +
-                    "DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e WHERE e.id = a.emplid AND e.dept = '" + dept + "' AND e.shift <> 'Normal' " +
-                    "AND a.date = '" + dateSelected + "' AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A UNION " +
-                    "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM(SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus " +
-                    "FROM (SELECT badgeID, NAME, linecode, '-' AS ScheduleIn, '-' AS intime, '-' AS outtime, 'Absent' AS Sttus FROM tbl_employee WHERE shift <> 'Normal' AND badgeID " +
-                    "NOT IN(SELECT b.badgeID FROM tbl_attendance a, tbl_employee b " +
-                    "WHERE a.EmplId = b.id AND a.date = '" + dateSelected + "' AND b.dept = '" + dept + "' AND intime IS NOT NULL) ) AS A ) AS a ORDER BY sttus, schedulein";
-
-                StartProgress("Loading...");
-
-                LoadDS(query);
-                FillGrid();
-
-                string record = dtSource.Rows.Count.ToString();
-
-                CloseProgress();
-                myConn.Close();
-                totalLblAll.Text = dtSource.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataOntime()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query =
-                    "SELECT linecode, DESCRIPTION AS section, badgeID, NAME, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT e.badgeID, e.name, e.linecode, f.description, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    "DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e, tbl_masterlinecode f WHERE e.id = a.emplid  AND e.linecode = f.name " +
-                    "AND e.dept = '" + dept + "' AND a.date = '" + dateSelected + "' AND a.intime IS NOT NULL AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Ontime' ORDER BY schedulein, linecode, NAME";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    if (dset.Tables[0].Rows.Count > 0)
-                    {
-                        dataGridViewOntimeList.DataSource = dset.Tables[0];
-                    }
-                }
-                totalLbl.Text = dataGridViewOntimeList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-
-        private void LoadDataOntimeNormal()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM (SELECT e.badgeID, e.name, e.linecode, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    " DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e WHERE e.id = a.emplid AND e.dept = '" + dept + "' " +
-                    "AND a.date = '" + dateSelected + "' AND e.shift = 'Normal' AND a.intime IS NOT NULL AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Ontime' ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    if (dset.Tables[0].Rows.Count > 0)
-                    {
-                        dataGridViewOntimeList.DataSource = dset.Tables[0];
-                    }
-                }
-                totalLbl.Text = dataGridViewOntimeList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataOntimeShift()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM (SELECT e.badgeID, e.name, e.linecode, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    " DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e WHERE e.id = a.emplid AND e.dept = '" + dept + "' " +
-                    "AND a.date = '" + dateSelected + "' AND e.shift <> 'Normal' AND a.intime IS NOT NULL AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Ontime' ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    if (dset.Tables[0].Rows.Count > 0)
-                    {
-                        dataGridViewOntimeList.DataSource = dset.Tables[0];
-                    }
-                }
-                totalLbl.Text = dataGridViewOntimeList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataLate()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "SELECT linecode, DESCRIPTION AS section, badgeID, NAME, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT e.badgeID, e.name, e.linecode, f.description, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    "DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e, tbl_masterlinecode f " +
-                    "WHERE e.id = a.emplid AND e.linecode = f.name AND e.dept = '" + dept + "' AND a.date = '" + dateSelected + "' AND " +
-                    "a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Late' ORDER BY schedulein, linecode, NAME";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewLateList.DataSource = dset.Tables[0];
-                }
-                totalLate.Text = dataGridViewLateList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataLateNormal()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM (SELECT e.badgeID, e.name, e.linecode, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    "DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e WHERE e.id = a.emplid AND e.dept = '" + dept + "' " +
-                    "AND a.date = '" + dateSelected + "' AND e.shift = 'Normal' AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Late' ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewLateList.DataSource = dset.Tables[0];
-                }
-                totalLate.Text = dataGridViewLateList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataLateShift()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM (SELECT e.badgeID, e.name, e.linecode, DATE_FORMAT(a.ScheduleIn, '%H:%i') AS ScheduleIn, " +
-                    "DATE_FORMAT(a.intime, '%H:%i') AS intime, DATE_FORMAT(a.outtime, '%H:%i') AS outtime, " +
-                    "IF(a.intime > a.ScheduleIn, 'Late', 'Ontime') AS Sttus FROM tbl_attendance a, tbl_employee e WHERE e.id = a.emplid AND e.dept = '" + dept + "' " +
-                    "AND a.date = '" + dateSelected + "' AND e.shift <> 'Normal' AND a.intime IS NOT NULL ORDER BY a.ScheduleIn ASC) AS A WHERE Sttus = 'Late' ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewLateList.DataSource = dset.Tables[0];
-                }
-                totalLate.Text = dataGridViewLateList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-
-        private void LoadDataAbsent()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "(SELECT linecode, DESCRIPTION AS section, badgeID, NAME, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT e.badgeID, e.NAME, e.linecode, f.description, '-' AS ScheduleIn, " +
-                    "'-' AS intime, '-' AS outtime, 'Absent' AS Sttus FROM tbl_employee e, tbl_masterlinecode f WHERE e.linecode = f.name  AND e.badgeID " +
-                    "NOT IN(SELECT b.badgeID FROM tbl_attendance a, tbl_employee b WHERE a.EmplId = b.id AND a.date = '"+dateSelected+"' AND b.dept = '"+dept+"' " +
-                    "AND intime IS NOT NULL)) AS A ) ORDER BY intime";
-                    
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewAbsent.DataSource = dset.Tables[0];
-                }
-
-                totalAbsent.Text = dataGridViewAbsent.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataAbsentNormal()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "(SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT badgeID, NAME, shift, linecode, '-' AS ScheduleIn, '-' AS intime, '-' AS outtime, 'Absent' AS Sttus FROM tbl_employee WHERE shift = 'Normal' AND " +
-                    "badgeID NOT IN(SELECT b.badgeID FROM tbl_attendance a, tbl_employee b WHERE a.EmplId = b.id AND a.date = '" + dateSelected + "' AND b.dept = '" + dept + "' AND " +
-                    "intime IS NOT NULL)) AS A ) ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewAbsent.DataSource = dset.Tables[0];
-                }
-
-                totalAbsent.Text = dataGridViewAbsent.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void LoadDataAbsentShift()
-        {
-            string koneksi = ConnectionDB.strProvider;
-            myConn = new MySqlConnection(koneksi);
-            try
-            {
-                string query = "(SELECT badgeID, NAME, linecode, ScheduleIn, intime, outtime, Sttus FROM " +
-                    "(SELECT badgeID, NAME, shift, linecode, '-' AS ScheduleIn, '-' AS intime, '-' AS outtime, 'Absent' AS Sttus FROM tbl_employee WHERE shift <> 'Normal' AND " +
-                    "badgeID NOT IN(SELECT b.badgeID FROM tbl_attendance a, tbl_employee b WHERE a.EmplId = b.id AND a.date = '" + dateSelected + "' AND b.dept = '" + dept + "' AND " +
-                    "intime IS NOT NULL)) AS A ) ORDER BY intime";
-
-                using (MySqlDataAdapter adpt = new MySqlDataAdapter(query, myConn))
-                {
-                    DataSet dset = new DataSet();
-                    adpt.Fill(dset);
-                    dataGridViewAbsent.DataSource = dset.Tables[0];
-                }
-
-                totalAbsent.Text = dataGridViewAbsent.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                myConn.Close();
-                //MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                myConn.Dispose();
-            }
-        }
-
-        private void tbSearch_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                string search = tbSearch.Text.Replace("'", "''");
-
-                (dataGridViewOntimeList.DataSource as DataTable).DefaultView.RowFilter =
-                    string.Format("badgeID LIKE '%" + search + "%'or section LIKE '%" + search + "%'or NAME LIKE '%" + search + "%'or linecode LIKE '%" + search + "%' " +
-                    "or scheduleIn LIKE '%" + search + "%' or intime LIKE '%" + search + "%' or outtime LIKE '%" + search + "%' or Sttus LIKE '%" + search + "%'");
-
-
-                // to display total data
-                totalLbl.Text = dataGridViewOntimeList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
 
         private void refresh()
         {
             // refresh request leave
             tbSearchAll.Clear();
-            // refresh request leave
-            tbSearch.Clear();
-            // refresh approve leave
-            tbSearchLate.Clear();
-            // refresh decline leave
-            tbSearchAbsent.Clear();
-
-            cmbShift.SelectedIndex = -1;
 
             // reset datagridview
-            DataGridView[] dgv = { dataGridViewAllList, dataGridViewOntimeList, dataGridViewLateList, dataGridViewAbsent };
-            for (int i = 0; i < dgv.Length; i++)
-            {
-                // remove data in datagridview result
-                dgv[i].DataSource = null;
-                dgv[i].Refresh();
+            // remove data in datagridview result
+            dataGridViewAllList.DataSource = null;
+            dataGridViewAllList.Refresh();
 
-                while (dgv[i].Columns.Count > 0)
-                {
-                    dgv[i].Columns.RemoveAt(0);
-                }
-                dgv[i].Update();
-                dgv[i].Refresh();
+            while (dataGridViewAllList.Columns.Count > 0)
+            {
+                dataGridViewAllList.Columns.RemoveAt(0);
             }
+            dataGridViewAllList.Update();
+            dataGridViewAllList.Refresh();
 
             LoadData();
-            LoadDataOntime();
-            LoadDataLate();
-            LoadDataAbsent();
         }
 
 
@@ -755,43 +354,18 @@ namespace SMTAttendance
             dateLabel.Text = DateTime.Parse(dateSelected).ToString("dddd, dd MMMM yyyy");
 
             // reset datagridview
-            DataGridView[] dgv = { dataGridViewAllList, dataGridViewOntimeList, dataGridViewLateList, dataGridViewAbsent };
-            for (int i = 0; i < dgv.Length; i++)
-            {
-                // remove data in datagridview result
-                dgv[i].DataSource = null;
-                dgv[i].Refresh();
+            // remove data in datagridview result
+            dataGridViewAllList.DataSource = null;
+            dataGridViewAllList.Refresh();
 
-                while (dgv[i].Columns.Count > 0)
-                {
-                    dgv[i].Columns.RemoveAt(0);
-                }
-                dgv[i].Update();
-                dgv[i].Refresh();
+            while (dataGridViewAllList.Columns.Count > 0)
+            {
+                dataGridViewAllList.Columns.RemoveAt(0);
             }
+            dataGridViewAllList.Update();
+            dataGridViewAllList.Refresh();
 
-
-            if (cmbShift.Text == "")
-            {
-                LoadData();
-                LoadDataOntime();
-                LoadDataLate();
-                LoadDataAbsent();
-            }
-            if (cmbShift.Text == "Normal")
-            {
-                LoadDataNormal();
-                LoadDataOntimeNormal();
-                LoadDataLateNormal();
-                LoadDataAbsentNormal();
-            }
-            if (cmbShift.Text == "Shift")
-            {
-                LoadDataShift();
-                LoadDataOntimeShift();
-                LoadDataLateShift();
-                LoadDataAbsentShift();
-            }
+            LoadData();
         }
 
         private void backButton_Click(object sender, EventArgs e)
@@ -803,87 +377,10 @@ namespace SMTAttendance
             this.Hide();
         }
 
-        private void tbSearchAbsent_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                string search = tbSearchAbsent.Text.Replace("'", "''");
-                (dataGridViewAbsent.DataSource as DataTable).DefaultView.RowFilter =
-                    string.Format("badgeID LIKE '%" + search + "%'or section LIKE '%" + search + "%'or NAME LIKE '%" + search + "%'or linecode LIKE '%" + search + "%' " +
-                    "or scheduleIn LIKE '%" + search + "%' or intime LIKE '%" + search + "%' or outtime LIKE '%" + search + "%' or Sttus LIKE '%" + search + "%'");
-
-                // to display total data
-                totalAbsent.Text = dataGridViewAbsent.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void tbSearchLate_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                string search = tbSearchLate.Text.Replace("'", "''");
-
-                (dataGridViewLateList.DataSource as DataTable).DefaultView.RowFilter =
-                    string.Format("badgeID LIKE '%" + search + "%'or section LIKE '%" + search + "%'or NAME LIKE '%" + search + "%'or linecode LIKE '%" + search + "%' " +
-                    "or scheduleIn LIKE '%" + search + "%' or intime LIKE '%" + search + "%' or outtime LIKE '%" + search + "%' or Sttus LIKE '%" + search + "%'");
-
-                // to display total data
-                totalLate.Text = dataGridViewLateList.Rows.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void dataGridViewOntimeList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Set table title
-            string[] title = { "Line Code", "Section", "Badge ID", "Name", "Schedule", "Actual In", "Actual Out", "Status" };
-            for (int i = 0; i < title.Length; i++)
-            {
-                dataGridViewOntimeList.Columns[i].HeaderText = "" + title[i];
-            }
-        }
-
-        private void dataGridViewLateList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Set table title
-            string[] title = { "Line Code", "Section", "Badge ID", "Name", "Schedule", "Actual In", "Actual Out", "Status" };
-            for (int i = 0; i < title.Length; i++)
-            {
-                dataGridViewLateList.Columns[i].HeaderText = "" + title[i];
-            }
-        }
-
-        private void dataGridViewAbsent_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            // Set table title
-            string[] title = { "Line Code", "Section", "Badge ID", "Name", "Schedule", "Actual In", "Actual Out", "Status" };
-            for (int i = 0; i < title.Length; i++)
-            {
-                dataGridViewAbsent.Columns[i].HeaderText = "" + title[i];
-            }
-        }
-
-        private void dataGridViewOntimeList_Paint(object sender, PaintEventArgs e)
-        {
-            help.norecord_dgv(dataGridViewOntimeList, e);
-        }
-
-        private void dataGridViewLateList_Paint(object sender, PaintEventArgs e)
-        {
-            help.norecord_dgv(dataGridViewLateList, e);
-        }
-
-        private void dataGridViewAbsent_Paint(object sender, PaintEventArgs e)
-        {
-            help.norecord_dgv(dataGridViewAbsent, e);
-        }
+        //private void dataGridViewAbsent_Paint(object sender, PaintEventArgs e)
+        //{
+        //    help.norecord_dgv(dataGridViewAbsent, e);
+        //}
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -898,8 +395,26 @@ namespace SMTAttendance
             string employeeslctd = dataGridViewAllList.Rows[i].Cells[3].Value.ToString();
             string statusslctd = dataGridViewAllList.Rows[i].Cells[7].Value.ToString();
             string dateslctd = dateSelected;
+            string linecodeslctd = dataGridViewAllList.Rows[i].Cells[0].Value.ToString();
+            string sectionslctd = dataGridViewAllList.Rows[i].Cells[1].Value.ToString();
+            string nameslctd = dataGridViewAllList.Rows[i].Cells[3].Value.ToString();
 
             if (e.ColumnIndex == 8)
+            {              
+                // convert date format
+                string _Date = dateLabel.Text;
+                DateTime dt = Convert.ToDateTime(_Date);
+
+                EditAttendance editAttendance = new EditAttendance();
+                editAttendance.userdetail.Text = userdetail.Text;
+                editAttendance.tbDateSchedule.Text = dt.ToString("yyyy-MM-dd");
+                editAttendance.tbLineCode.Text = linecodeslctd;
+                editAttendance.tbSection.Text = sectionslctd;
+                editAttendance.tbName.Text = nameslctd;
+                editAttendance.ShowDialog();
+            }
+
+            if (e.ColumnIndex == 9)
             {
                 if (statusslctd != "Absent")
                 {
@@ -957,7 +472,6 @@ namespace SMTAttendance
             }
         }
 
-
         private void Attendance_FormClosing(object sender, FormClosingEventArgs e)
         {
             string message = "Are you sure you want to close this application?";
@@ -974,36 +488,6 @@ namespace SMTAttendance
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar(result.ToString(), 750);
                 SnackBarMessage.Show(this);
             }
-        }
-
-        private void dataGridViewAllList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (this.dataGridViewAllList.SelectedRows.Count > 0)
-            {
-                int i;
-                i = dataGridViewAllList.SelectedCells[0].RowIndex;
-                string linecodeslctd = dataGridViewAllList.Rows[i].Cells[0].Value.ToString();
-                string sectionslctd = dataGridViewAllList.Rows[i].Cells[1].Value.ToString();
-                string nameslctd = dataGridViewAllList.Rows[i].Cells[3].Value.ToString();
-
-                // convert date format
-                string _Date = dateLabel.Text;
-                DateTime dt = Convert.ToDateTime(_Date);
-
-                EditAttendance editAttendance = new EditAttendance();
-                editAttendance.userdetail.Text = userdetail.Text;
-                editAttendance.tbDateSchedule.Text = dt.ToString("yyyy-MM-dd");
-                editAttendance.tbLineCode.Text = linecodeslctd;
-                editAttendance.tbSection.Text = sectionslctd;
-                editAttendance.tbName.Text = nameslctd;
-                editAttendance.ShowDialog();
-            }
-        }
-
-        private void dataGridViewLeaveList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            dataGridViewOntimeList.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewOntimeList.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
         }
     }
 }
